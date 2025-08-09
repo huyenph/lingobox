@@ -9,9 +9,11 @@ import (
 )
 
 type Config struct {
-	Port int
+	Port             int
 	TelegramBotToken string
 	DatabaseURL      string
+	AuthorUsername   string
+	AuthorEmail      string
 }
 
 func getEnv(key, fallback string) string {
@@ -20,7 +22,6 @@ func getEnv(key, fallback string) string {
 	}
 	return fallback
 }
-
 
 func LoadConfig() *Config {
 	err := godotenv.Load()
@@ -33,9 +34,11 @@ func LoadConfig() *Config {
 		log.Fatalf("Invalid PORT value: %v", err)
 	}
 	cfg := &Config{
-		Port:              port,
-		TelegramBotToken:  getEnv("TELEGRAM_BOT_TOKEN", ""),
-		DatabaseURL:       getEnv("DATABASE_URL", ""),
+		Port:             port,
+		TelegramBotToken: getEnv("TELEGRAM_BOT_TOKEN", ""),
+		DatabaseURL:      getEnv("DATABASE_URL", ""),
+		AuthorUsername:   getEnv("AUTHOR_USERNAME", ""),
+		AuthorEmail:      getEnv("AUTHOR_EMAIL", ""),
 	}
 
 	if cfg.TelegramBotToken == "" {
@@ -47,4 +50,3 @@ func LoadConfig() *Config {
 
 	return cfg
 }
-

@@ -3,7 +3,9 @@ package bot
 import (
 	"log"
 
+	"github.com/huyenph/lingobox/config"
 	"github.com/huyenph/lingobox/service"
+	"github.com/huyenph/lingobox/utils"
 	"gopkg.in/tucnak/telebot.v2"
 )
 
@@ -21,6 +23,15 @@ type UserState struct {
 }
 
 func SetupHandlers(b *telebot.Bot) {
+	cfg := config.LoadConfig()
+
+	b.Handle("/start", func(m *telebot.Message) {
+		b.Send(m.Sender, utils.StartMessage)
+	})
+	b.Handle("/help", func(m *telebot.Message) {
+		b.Send(m.Sender, utils.GetHelpMessage(cfg.AuthorUsername, cfg.AuthorEmail))
+	})
+
 	b.Handle("/newword", func(m *telebot.Message) {
 		userID := m.Sender.ID
 
