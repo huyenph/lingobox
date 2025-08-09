@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"gopkg.in/tucnak/telebot.v2"
 
@@ -44,16 +42,5 @@ func main() {
 
 	bot.SetupHandlers(telegramBot)
 
-	go telegramBot.Start()
-
-	app := fiber.New()
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("✅ LingoBox — healthy")
-	})
-
-	log.Printf("✅ Starting server on :%d\n", cfg.Port)
-	if err := app.Listen(fmt.Sprintf(":%d", cfg.Port)); err != nil {
-		log.Fatal(err)
-	}
+	telegramBot.Start()
 }
