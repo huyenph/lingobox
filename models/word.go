@@ -11,4 +11,5 @@ type Word struct {
 	Word     string `gorm:"index:idx_user_word,unique;column:word"`
 	Meaning  string `gorm:"column:meaning"`
 	Language string `gorm:"column:language"`
+	Examples []Example `gorm:"foreignKey:WordID;constraint:OnDelete:CASCADE;"`
 }
