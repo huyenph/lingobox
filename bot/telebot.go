@@ -7,9 +7,9 @@ import (
 var userStates = make(map[int64]*UserState)
 
 type UserState struct {
-	WaitingForWord            bool
-	WaitingForMeaning         bool
-	WaitingForExampleConfirm  bool
+	WaitingForWord             bool
+	WaitingForMeaning          bool
+	WaitingForExampleConfirm   bool
 	WaitingForExampleSentences bool
 
 	TempWord     string
@@ -21,7 +21,6 @@ func SetupHandlers(b *telebot.Bot) {
 	b.Handle("/newword", func(m *telebot.Message) {
 		userID := m.Sender.ID
 
-		// Initialize or reset state for this user
 		userStates[userID] = &UserState{
 			WaitingForWord: true,
 		}
@@ -33,7 +32,6 @@ func SetupHandlers(b *telebot.Bot) {
 		userID := m.Sender.ID
 		state, exists := userStates[userID]
 		if !exists {
-			// Not in any flow, ignore or prompt help
 			return
 		}
 
@@ -64,10 +62,7 @@ func SetupHandlers(b *telebot.Bot) {
 
 				b.Send(m.Sender, "Please type your example sentences one by one. Type 'done' when finished.")
 			} else {
-				// Save word & meaning to DB here (implement your DB save logic)
-				// clear user state
 				delete(userStates, userID)
-
 				b.Send(m.Sender, "Got it! Your word has been saved without examples.")
 			}
 			return
@@ -75,8 +70,6 @@ func SetupHandlers(b *telebot.Bot) {
 
 		if state.WaitingForExampleSentences {
 			if m.Text == "done" {
-				// Save word, meaning, and examples to DB here
-
 				delete(userStates, userID)
 				b.Send(m.Sender, "Thanks! Your word and examples are saved.")
 			} else {

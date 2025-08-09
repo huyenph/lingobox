@@ -26,7 +26,6 @@ func main() {
 	// Connect to database
 	config.Connect(cfg)
 
-	// Auto migrate User and Word models
 	config.DB.AutoMigrate(&models.User{}, &models.Word{}, &models.Example{})
 
 	// Initialize bot with telebot
@@ -43,10 +42,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Setup your bot handlers in a separate function (see below)
 	bot.SetupHandlers(telegramBot)
 
-	// Run the bot in a separate goroutine so it doesn't block Fiber
 	go telegramBot.Start()
 
 	app := fiber.New()
