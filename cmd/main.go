@@ -11,7 +11,7 @@ import (
 
 	"github.com/huyenph/lingobox/bot"
 	"github.com/huyenph/lingobox/config"
-	"github.com/huyenph/lingobox/models"
+	"github.com/huyenph/lingobox/model"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 	// Connect to database
 	config.Connect(cfg)
 
-	config.DB.AutoMigrate(&models.User{}, &models.Word{}, &models.Example{})
+	config.DB.AutoMigrate(&model.User{}, &model.Word{}, &model.Example{})
 
 	// Initialize bot with telebot
 	if cfg.TelegramBotToken == "" {
@@ -35,7 +35,7 @@ func main() {
 
 	// Create new telebot instance
 	telegramBot, err := telebot.NewBot(telebot.Settings{
-		Token:cfg.TelegramBotToken,
+		Token:  cfg.TelegramBotToken,
 		Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
 	})
 	if err != nil {
@@ -54,6 +54,6 @@ func main() {
 
 	log.Printf("✅ Starting server on :%d\n", cfg.Port)
 	if err := app.Listen(fmt.Sprintf(":%d", cfg.Port)); err != nil {
-	log.Fatal(err)
+		log.Fatal(err)
 	}
 }
