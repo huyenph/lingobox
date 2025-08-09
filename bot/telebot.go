@@ -1,6 +1,9 @@
 package bot
 
 import (
+	"log"
+
+	"github.com/huyenph/lingobox/service"
 	"gopkg.in/tucnak/telebot.v2"
 )
 
@@ -62,6 +65,20 @@ func SetupHandlers(b *telebot.Bot) {
 
 				b.Send(m.Sender, "Please type your example sentences one by one. Type 'done' when finished.")
 			} else {
+				user, err := service.InsertUser(m.Sender.ID, m.Sender.Username, m.Sender.LanguageCode)
+				if err != nil {
+					log.Println("CreateUser error:", err)
+					return
+				}
+
+				word, err := service.InserWord(user, state.TempWord, state.TempMeaning, m.Sender.LanguageCode, nil)
+				if err != nil {
+					log.Println("CreateWord error:", err)
+					return
+				}
+
+				log.Println("Word saved:", word.Word)
+
 				delete(userStates, userID)
 				b.Send(m.Sender, "Got it! Your word has been saved without examples.")
 			}
@@ -70,6 +87,30 @@ func SetupHandlers(b *telebot.Bot) {
 
 		if state.WaitingForExampleSentences {
 			if m.Text == "done" {
+				user, err := service.InsertUser(
+					m.Sender.ID,
+					m.Sender.Username,
+					m.Sender.LanguageCode,
+				)
+				if err != nil {
+					log.Println("CreateUser error:", err)
+					return
+				}
+
+				word, err := service.InserWord(
+					user,
+					state.TempWord,
+					state.TempMeaning,
+					m.Sender.LanguageCode,
+					state.TempExamples,
+				)
+				if err != nil {
+					log.Println("CreateWord error:", err)
+					return
+				}
+
+				log.Println("Word saved:", word.Word)
+
 				delete(userStates, userID)
 				b.Send(m.Sender, "Thanks! Your word and examples are saved.")
 			} else {
