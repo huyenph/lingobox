@@ -8,6 +8,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/huyenph/lingobox/config"
+	"github.com/huyenph/lingobox/models"
 )
 
 func main() {
@@ -21,6 +22,9 @@ func main() {
 
 	// Connect to database
 	config.Connect(cfg)
+
+	// Auto migrate User and Word models
+	config.DB.AutoMigrate(&models.User{}, &models.Word{})
 
 	app := fiber.New()
 
