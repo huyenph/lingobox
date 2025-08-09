@@ -32,3 +32,17 @@ func InserWord(
 
 	return &word, nil
 }
+
+func GetUserWords(userID uint) ([]model.Word, error) {
+	var words []model.Word
+
+	err := config.DB.
+		Preload("Examples").
+		Where("user_id = ?", userID).
+		Find(&words).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return words, nil
+}

@@ -27,3 +27,15 @@ func InsertUser(telegramID int64, username string, language string) (*model.User
 
 	return &user, nil
 }
+
+func GetUserByTelegramID(telegramID int64) (*model.User, error) {
+	var user model.User
+	err := config.DB.Where("telegram_id = ?", telegramID).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
+}

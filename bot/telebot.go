@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/huyenph/lingobox/config"
@@ -40,6 +41,41 @@ func SetupHandlers(b *telebot.Bot) {
 		}
 
 		b.Send(m.Sender, "Please type the new word:")
+	})
+
+	b.Handle("/list", func(m *telebot.Message) {
+		user, err := service.GetUserByTelegramID(m.Sender.ID)
+
+		if err != nil {
+			b.Send(m.Sender, "❌ Failed to get user.")
+			return
+		}
+
+		words, err := service.GetUserWords(user.ID)
+		if err != nil {
+			b.Send(m.Sender, "❌ Failed to load your words.")
+			return
+		}
+
+		if len(words) == 0 {
+			b.Send(m.Sender, "You don't have any saved words yet.")
+			return
+		}
+
+		response := "📚 Your saved words:\n"
+		response += "\n"
+		for i, w := range words {
+			response += fmt.Sprintf("%d. %s: %s\n", i+1, w.Word, w.Meaning)
+			if len(w.Examples) > 0 {
+				response += "Examples:\n"
+				for _, ex := range w.Examples {
+					response += fmt.Sprintf("  - %s\n", ex.Sentence)
+				}
+			}
+			response += "\n"
+		}
+
+		b.Send(m.Sender, response)
 	})
 
 	b.Handle(telebot.OnText, func(m *telebot.Message) {
