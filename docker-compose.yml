@@ -4,7 +4,6 @@ services:
   lingobox:
     build: .
     container_name: lingobox
-    image: ghcr.io/huyenph/lingobox:latest
     restart: always
     environment:
       - APP_ENV=production
