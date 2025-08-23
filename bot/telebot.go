@@ -3,6 +3,7 @@ package bot
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/huyenph/lingobox/config"
 	"github.com/huyenph/lingobox/service"
@@ -105,7 +106,7 @@ func SetupHandlers(b *telebot.Bot) {
 
 		if state.WaitingForExampleConfirm {
 			text := m.Text
-			if text == "yes" || text == "Yes" {
+			if strings.ToLower(text) == "yes" {
 				state.WaitingForExampleConfirm = false
 				state.WaitingForExampleSentences = true
 				state.TempExamples = []string{}
@@ -133,7 +134,7 @@ func SetupHandlers(b *telebot.Bot) {
 		}
 
 		if state.WaitingForExampleSentences {
-			if m.Text == "done" {
+			if strings.ToLower(m.Text) == "done" {
 				user, err := service.InsertUser(
 					m.Sender.ID,
 					m.Sender.Username,
