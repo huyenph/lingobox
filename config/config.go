@@ -24,7 +24,13 @@ func getEnv(key, fallback string) string {
 }
 
 func LoadConfig() *Config {
-	err := godotenv.Load()
+	envFile := ".env"
+	if os.Getenv("APP_ENV") == "dev" {
+		envFile = ".env.dev"
+	} else if os.Getenv("APP_ENV") == "stag" {
+		envFile = ".env.stag"
+	}
+	err := godotenv.Load(envFile)
 	if err != nil {
 		log.Println("No .env file found, reading config from environment")
 	}

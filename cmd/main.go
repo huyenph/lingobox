@@ -4,7 +4,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/joho/godotenv"
 	"gopkg.in/tucnak/telebot.v2"
 
 	"github.com/huyenph/lingobox/bot"
@@ -13,11 +12,6 @@ import (
 )
 
 func main() {
-	// load .env if present
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, continuing...")
-	}
-
 	// Load app configuration
 	cfg := config.LoadConfig()
 
