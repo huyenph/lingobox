@@ -1,0 +1,29 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.HP_SSH_KEY }}
+
+      - name: Deploy to Droplet via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.HP_HOST }} << EOF
+            echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
+
+            cd "${{ secrets.APP_PATH }}"
+
+            docker compose pull
+            docker compose up -d
+          EOF

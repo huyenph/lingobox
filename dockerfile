@@ -21,6 +21,6 @@ COPY --from=build /app/lingo-bot .
 
 COPY .env .
 
-ENV APP_ENV=dev
+ENV APP_ENV=production
 
 CMD ["./lingo-bot"]
