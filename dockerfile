@@ -10,17 +10,15 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o lingo-bot ./cmd/main.go
+RUN go build -o lingobox ./cmd/main.go
 
 # ---------- Final stage ----------
 FROM alpine:latest
 
 WORKDIR /app
 
-COPY --from=build /app/lingo-bot .
-
-COPY .env .
+COPY --from=build /app/lingobox .
 
 ENV APP_ENV=production
 
-CMD ["./lingo-bot"]
+CMD ["./lingobox"]
