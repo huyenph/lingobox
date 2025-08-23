@@ -19,7 +19,7 @@ jobs:
 
       - name: Deploy to Droplet via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.HP_HOST }} << EOF
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.HP_PORT }} root@${{ secrets.HP_HOST }} << EOF
             echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
 
             cd "${{ secrets.APP_PATH }}"
