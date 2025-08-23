@@ -24,7 +24,7 @@ func getEnv(key, fallback string) string {
 }
 
 func LoadConfig() *Config {
-	envFile := ".env"
+	envFile := ""
 	if os.Getenv("APP_ENV") == "dev" {
 		envFile = ".env.dev"
 	} else if os.Getenv("APP_ENV") == "stag" {

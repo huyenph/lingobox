@@ -17,7 +17,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.HP_SSH_KEY }}
 
-      - name: Deploy to Droplet via SSH
+      - name: Deploy to Server via SSH
         run: |
           ssh -o StrictHostKeyChecking=no -p ${{ secrets.HP_PORT }} root@${{ secrets.HP_HOST }} << EOF
             echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
